@@ -52,7 +52,19 @@ app.get('/items', (req, res) =>{
 
 
 app.get('/items/:id', (req, res) =>{
-  const id = req.params.id
+  const id = parseInt(req.params.id);
+
+  if (isNaN(id) || id < 0) {
+    return res.status(400).json({ error: "ID inválido." });
+  }
+
+  const item = items.find((item) => item.id === id);
+
+  if (!item) {
+    return res.status(404).json({ error: "Não há nenhum item com este id." });
+  }
+
+  res.status(200).json(item);
 });
 
 
