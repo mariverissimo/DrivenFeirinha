@@ -11,6 +11,10 @@ app.use(express.json());
 app.post('/items', (req, res) =>{
   const {name, quantity, type} = req.body;
 
+  if (name === "" || type === "" || quantity === 0){
+    return res.status(422).json({ error: "Erro. Verifique se as informações estão preenchidas corretamente." });
+  }
+
  if (typeof name !== "string" || typeof type !== "string") {
   return res.status(400).json({ error: "Por favor, somente letras e espaço para escrever o nome e tipo de item." });
 }
@@ -42,7 +46,7 @@ app.get('/items', (req, res) =>{
   const { type } = req.query;
 
   if (type) {
-    const filteredItems = items.filter(item => item.type.toLowerCase() === type.toLowerCase());
+    const filteredItems = items.filter(item => item.type === type);
     return res.status(200).json(filteredItems);
   }
 
